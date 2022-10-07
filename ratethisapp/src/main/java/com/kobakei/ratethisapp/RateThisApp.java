@@ -1,46 +1,29 @@
-/*
- * Copyright 2013-2017 Keisuke Kobayashi
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.kobakei.ratethisapp;
 
-import java.lang.ref.WeakReference;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+
+import java.lang.ref.WeakReference;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
  * RateThisApp<br>
  * A library to show the app rate dialog
- * @author Keisuke Kobayashi (k.kobayashi.122@gmail.com)
  *
+ * @author Keisuke Kobayashi (k.kobayashi.122@gmail.com)
+ * @author kishandonga
  */
 public class RateThisApp {
 
@@ -113,16 +96,6 @@ public class RateThisApp {
     }
 
     /**
-     * This API is deprecated.
-     * You should call onCreate instead of this API in Activity's onCreate().
-     * @param context
-     */
-    @Deprecated
-    public static void onStart(Context context) {
-        onCreate(context);
-    }
-
-    /**
      * Show the rate dialog if the criteria is satisfied.
      * @param context Context
      * @return true if shown, false otherwise.
@@ -165,11 +138,8 @@ public class RateThisApp {
                 return true;
             }
             long threshold = TimeUnit.DAYS.toMillis(sConfig.mCriteriaInstallDays);   // msec
-            if (new Date().getTime() - mInstallDate.getTime() >= threshold &&
-                new Date().getTime() - mAskLaterDate.getTime() >= threshold) {
-                return true;
-            }
-            return false;
+            return new Date().getTime() - mInstallDate.getTime() >= threshold &&
+                    new Date().getTime() - mAskLaterDate.getTime() >= threshold;
         }
     }
 
@@ -228,15 +198,12 @@ public class RateThisApp {
                 break;
             case Config.CANCEL_MODE_BACK_KEY:
                 builder.setCancelable(false);
-                builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                    @Override
-                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            dialog.cancel();
-                            return true;
-                        } else {
-                            return false;
-                        }
+                builder.setOnKeyListener((dialog, keyCode, event) -> {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        dialog.cancel();
+                        return true;
+                    } else {
+                        return false;
                     }
                 });
                 break;
@@ -244,60 +211,43 @@ public class RateThisApp {
                 builder.setCancelable(false);
                 break;
         }
-        builder.setPositiveButton(rateButtonID, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (sCallback != null) {
-                    sCallback.onYesClicked();
-                }
-                String appPackage = context.getPackageName();
-                String url = "market://details?id=" + appPackage;
-                if (!TextUtils.isEmpty(sConfig.mUrl)) {
-                    url = sConfig.mUrl;
-                }
-                try {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
-                }
-                setOptOut(context, true);
+        builder.setPositiveButton(rateButtonID, (dialog, which) -> {
+            if (sCallback != null) {
+                sCallback.onYesClicked();
             }
-        });
-        builder.setNeutralButton(cancelButtonID, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (sCallback != null) {
-                    sCallback.onCancelClicked();
-                }
-                clearSharedPreferences(context);
-                storeAskLaterDate(context);
+            String appPackage = context.getPackageName();
+            String url = "market://details?id=" + appPackage;
+            if (!TextUtils.isEmpty(sConfig.mUrl)) {
+                url = sConfig.mUrl;
             }
-        });
-        builder.setNegativeButton(thanksButtonID, new OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (sCallback != null) {
-                    sCallback.onNoClicked();
-                }
-                setOptOut(context, true);
+            try {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName())));
             }
+            setOptOut(context, true);
         });
-        builder.setOnCancelListener(new OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (sCallback != null) {
-                    sCallback.onCancelClicked();
-                }
-                clearSharedPreferences(context);
-                storeAskLaterDate(context);
+        builder.setNeutralButton(cancelButtonID, (dialog, which) -> {
+            if (sCallback != null) {
+                sCallback.onCancelClicked();
             }
+            clearSharedPreferences(context);
+            storeAskLaterDate(context);
         });
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                sDialogRef.clear();
+        builder.setNegativeButton(thanksButtonID, (dialog, which) -> {
+            if (sCallback != null) {
+                sCallback.onNoClicked();
             }
+            setOptOut(context, true);
         });
+        builder.setOnCancelListener(dialog -> {
+            if (sCallback != null) {
+                sCallback.onCancelClicked();
+            }
+            clearSharedPreferences(context);
+            storeAskLaterDate(context);
+        });
+        builder.setOnDismissListener(dialog -> sDialogRef.clear());
         sDialogRef = new WeakReference<>(builder.show());
     }
 
@@ -337,14 +287,17 @@ public class RateThisApp {
      */
     private static void storeInstallDate(final Context context, SharedPreferences.Editor editor) {
         Date installDate = new Date();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            PackageManager packMan = context.getPackageManager();
-            try {
-                PackageInfo pkgInfo = packMan.getPackageInfo(context.getPackageName(), 0);
-                installDate = new Date(pkgInfo.firstInstallTime);
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
+        PackageManager packMan = context.getPackageManager();
+        try {
+            PackageInfo pkgInfo;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                pkgInfo = packMan.getPackageInfo(context.getPackageName(), PackageManager.PackageInfoFlags.of(0));
+            } else {
+                pkgInfo = packMan.getPackageInfo(context.getPackageName(), 0);
             }
+            installDate = new Date(pkgInfo.firstInstallTime);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         editor.putLong(KEY_INSTALL_DATE, installDate.getTime());
         log("First install: " + installDate.toString());

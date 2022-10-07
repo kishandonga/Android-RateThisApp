@@ -1,13 +1,9 @@
 Android-RateThisApp
 ===================
 
-[![Build Status](https://circleci.com/gh/kobakei/Android-RateThisApp.svg?style=shield)](https://circleci.com/gh/kobakei/Android-RateThisApp/tree/master)
-[![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://bintray.com/kobakei/maven/ratethisapp/_latestVersion)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--RateThisApp-green.svg?style=true)](https://android-arsenal.com/details/1/2893)
-
 Android-RateThisApp is an library to show "Rate this app" dialog.
 
-![Screen shot](https://raw.github.com/kobakei/Android-RateThisApp/master/screenshot_resized.png)
+![Screen shot](https://raw.github.com/kishandonga/Android-RateThisApp/master/screenshot_resized.png)
 
 The library monitors the following status
 
@@ -25,10 +21,6 @@ dependencies {
     compile 'io.github.kobakei:ratethisapp:x.y.z'
 }
 ```
-
-x.y.z is [ ![Download](https://api.bintray.com/packages/kobakei/maven/ratethisapp/images/download.svg) ](https://bintray.com/kobakei/maven/ratethisapp/_latestVersion)
-
-**NOTICE**: From 1.0.0, group ID has been changed from `com.kobakei` to `io.github.kobakei`.
 
 ### Basic usage
 
@@ -124,26 +116,3 @@ RateThisApp.setCallback(new RateThisApp.Callback() {
 ## Contribute this project
 
 If you want to contribute this project, please send pull request.
-In present, I need contributors who can translate resources from English/Japanese into other languages.
-
-## License
-
-```
-Copyright 2013-2017 Keisuke Kobayashi
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
-
-## Author
-
-Keisuke Kobayashi - kobakei122@gmail.com

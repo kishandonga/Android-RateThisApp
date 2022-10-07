@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.3.0 (2022/10/07)
+
+- New feature
+  - `RateThisApp.onStart` method removed. Please call `RateThisApp.onCreate` instead.
+- Other
+  - Refactoring
+  - SDK update added support for API level 33 and minimum API level is 16
+
 ## 1.2.0 (2017/04/27)
 
 - New feature

@@ -1,4 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kobakei.ratethisapp">
-
-</manifest>
+<manifest package="com.kobakei.ratethisapp"></manifest>

@@ -1,35 +1,29 @@
 apply plugin: "com.android.library"
-apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 33
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 25
+        minSdkVersion 16
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
     }
 
     buildTypes {
-      release {
-        minifyEnabled false
-      }
+        release {
+            minifyEnabled false
+        }
+    }
+
+    lintOptions {
+        abortOnError true
+        showAll true
     }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.3.2"
-}
-
-publish {
-    userOrg = 'kobakei'
-    groupId = 'io.github.kobakei'
-    artifactId = 'ratethisapp'
-    publishVersion = "1.2.0"
-    desc = 'Android library to show "Rate this app" dialog'
-    website = 'https://github.com/kobakei/Android-RateThisApp'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation "org.robolectric:robolectric:3.3.2"
 }

@@ -46,7 +46,7 @@ public class RateThisAppTest {
     public void onStart_isSuccess() {
         Context context = RuntimeEnvironment.application.getApplicationContext();
 
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
 
         SharedPreferences sharedPreferences = RuntimeEnvironment.application.getSharedPreferences(
                 PREF_NAME, Context.MODE_PRIVATE);
@@ -72,13 +72,13 @@ public class RateThisAppTest {
 
         RateThisApp.init(new RateThisApp.Config(1, 3));
 
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
         Assert.assertFalse(RateThisApp.shouldShowRateDialog());
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
         Assert.assertFalse(RateThisApp.shouldShowRateDialog());
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
         Assert.assertTrue(RateThisApp.shouldShowRateDialog());
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
         Assert.assertTrue(RateThisApp.shouldShowRateDialog());
     }
 
@@ -87,9 +87,9 @@ public class RateThisAppTest {
         Context context = RuntimeEnvironment.application.getApplicationContext();
 
         Assert.assertEquals(0, RateThisApp.getLaunchCount(context));
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
         Assert.assertEquals(1, RateThisApp.getLaunchCount(context));
-        RateThisApp.onStart(context);
+        RateThisApp.onCreate(context);
         Assert.assertEquals(2, RateThisApp.getLaunchCount(context));
     }
 
