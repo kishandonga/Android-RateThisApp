@@ -17,8 +17,16 @@ and show a dialog to engage users to rate the app in Google Play.
 ### Dependency
 
 ```groovy
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+
+```groovy
 dependencies {
-    compile 'io.github.kobakei:ratethisapp:x.y.z'
+    implementation 'com.github.kishandonga:Android-RateThisApp:1.3.0'
 }
 ```
 
