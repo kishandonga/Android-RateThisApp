@@ -26,7 +26,7 @@ allprojects {
 
 ```groovy
 dependencies {
-    implementation 'com.github.kishandonga:Android-RateThisApp:1.3.0'
+    implementation 'com.github.kishandonga:Android-RateThisApp:1.3.1'
 }
 ```
 
